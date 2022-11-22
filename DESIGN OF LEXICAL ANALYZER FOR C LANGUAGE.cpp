@@ -3,6 +3,8 @@
 #include <vector>
 #include <unordered_map>
 
+// int main ( ) { printf ( "ashu" ) ; return 0 ; }
+
 using namespace std;
 
 vector<string> s = {"auto", "break", "case", "char", "const", "continue", "default",

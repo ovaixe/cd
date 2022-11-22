@@ -5,6 +5,8 @@
 #include<vector>
 #include<bits/stdc++.h>
 
+// Input string: "a+b*c*d" 
+
 using namespace std;
 
 

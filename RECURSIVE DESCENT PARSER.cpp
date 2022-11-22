@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 int E(), Edash();
+// i + i + i$
+// i + i +$ 
 char *ip;
 char string[50];
 int main()

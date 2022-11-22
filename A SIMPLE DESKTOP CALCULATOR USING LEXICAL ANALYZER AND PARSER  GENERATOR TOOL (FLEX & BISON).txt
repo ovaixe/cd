@@ -1,0 +1,126 @@
+lexanalyzer.l 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h> 
+#include "y.tab.h" 
+#define TABSIZE 1000 
+#define true 1 
+#define false 0 
+char* var_names[TABSIZE]; // where the variable names will be stored int var_def[TABSIZE]; // flag to determine whether a var is defined int n_of_names = 0; // counter of variables 
+void reset() { 
+ /* this will just reset all the flags to false */ 
+ int j; 
+ for(j = 0; j < TABSIZE; j++) 
+ var_def[j] = false; 
+} 
+int install(char *txt) { 
+ int j; char *s; 
+ /* if the table of var_names is still empty */ 
+ /* add the first record at 0 and return 0 */ 
+ if(n_of_names == 0) { 
+ s = strdup(txt); 
+ var_names[0] = s; 
+ ++n_of_names; 
+ return 0; 
+ } 
+  
+ /* if the table has contents already, return the index */  for(j = 0; j < n_of_names; ++j) { 
+ if(strcmp(txt, var_names[j]) == 0) { 
+ return j; 
+ } 
+ }
+ /* if the table is not empty and the var name is not yet listed */  /* list the new var name and return the index */  s = strdup(txt); 
+ var_names[j] = s; 
+ ++n_of_names; 
+ return j; 
+} 
+%} 
+ALPHA [a-z]|[a-z][a-z] 
+NUM [0-9]|[0-9][0-9] 
+%% 
+[ \n\t] { } 
+[0-9][0-9]*(\.[0-9]+)? { 
+ /* convert yytext to a double and return it */ 
+ yylval.num = atof(yytext); 
+ return NUMBER; 
+} 
+{ALPHA}|{ALPHA}{NUM} { 
+ /* install the variable found to the array and return the index */  yylval.index = install(yytext); 
+ return VARIABLE; 
+} 
+. { 
+ return yytext[0]; 
+} 
+%% 
+int yywrap(void) 
+{ 
+ return 1; 
+}
+
+
+
+parserGrammar.y 
+%{ 
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <string.h> 
+#include <math.h> 
+#include "y.tab.h" 
+#define TABSIZE 1000 
+#define true 1 
+#define false 0 
+/* the following were defined in lexanalyzer.l */ 
+extern char* var_names[TABSIZE]; 
+extern int var_def[TABSIZE]; 
+extern int n_of_names; 
+extern int install(char *txt); 
+extern void reset(); 
+/* variables for the grammar file */ 
+int invalid = false; // just added for error checking double var_values[TABSIZE]; // array where all the values are stored 
+int yyerror(const char *p)  
+{ 
+ fprintf(stderr, "%s\n", p); // print the error message  invalid = true; 
+} 
+%} 
+%union { 
+ /* this will be used for the yylval. */ 
+ /* it is a union since two data types will be used */ 
+ double num; // the number provided by the user  int index; // index of the variable name inside the array };
+%start manycmds 
+%token <index> VARIABLE 
+%token <num> NUMBER 
+%type <num> onecmd 
+%type <num> expression 
+%type <num> assignment 
+%type <num> term 
+%type <num> factor 
+%type <num> primary 
+%% 
+manycmds : onecmd { } 
+| manycmds onecmd { } 
+; 
+onecmd : expression ';' { if(!invalid) fprintf(stderr, "%lf\n", $1); invalid = 0; } | assignment ';' { if(!invalid) fprintf(stderr, "%lf\n", $1); invalid = 0; } 
+expression : term { $$ = $1; } 
+| '-' term { $$ = -$2; } 
+| expression '+' term { $$ = $1 + $3; } 
+| expression '-' term { $$ = $1 - $3; } 
+; 
+term : factor { $$ = $1; } 
+| term '*' factor { $$ = $1 * $3; } 
+| term '/' factor { if($3 == 0) yyerror("undefined"); else $$ = $1 / $3; } ; 
+factor : primary { $$ = $1; } 
+| primary '^' factor { $$ = pow($1, $3); } 
+; 
+primary : NUMBER { $$ = $1; } 
+| VARIABLE { if(!var_def[$1]) yyerror("undefined"); else $$ =  var_values[$1]; } 
+| '(' expression ')' { $$ = $2; } 
+;
+assignment : '@' VARIABLE '=' expression { $$ = var_values[$2] = $4; var_def[$2] = 1; } ; 
+%% 
+int main(void) 
+{ 
+ /* reset all the definition flags first */ 
+ reset(); 
+ yyparse(); 
+ return 0; 
+} 

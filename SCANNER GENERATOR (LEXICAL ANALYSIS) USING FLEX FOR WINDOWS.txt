@@ -1,4 +1,10 @@
-lexanalyzer.l
+
+// Code will be saved in EditPlusPortable Folder
+// Commands To run the file : 
+// 1  lex filename.l    2  gcc lex.yy.c    3    ./a.exe
+
+// Input : Any correct C code
+
 
 %option noyywrap 
 %{ 

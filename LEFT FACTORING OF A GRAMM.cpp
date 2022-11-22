@@ -3,6 +3,9 @@
 #include<vector>
 #include<unordered_map>
 #include<algorithm>
+
+// S-iEtS|iEtSeS|a
+
 using namespace std;
 vector<char> key;
 vector<string> prod;

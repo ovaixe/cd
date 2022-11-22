@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// NEEDS TEXT FILE
 
 string prntstr(string &input, int in){
     string ans;

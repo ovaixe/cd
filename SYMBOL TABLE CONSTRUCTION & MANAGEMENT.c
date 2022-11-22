@@ -2,6 +2,8 @@
 #include <string.h>
 #include <ctype.h>
 
+// int main ( ) { printf ( "Aku" ) ; return 0 ; }
+
 int bitFormat(int iNumber) // for printing a decimal number in 8 bit binary form
 {
     int arrDig[8] = {128, 64, 32, 16, 8, 4, 2, 1};

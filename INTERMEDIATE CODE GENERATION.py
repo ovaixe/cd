@@ -1,4 +1,7 @@
 OPERATORS = set(['+', '-', '*', '/', '(', ')'])
+
+# INP z = -a * b + c
+
 PRI = {'+':1, '-':1, '*':2, '/':2}
 ### INFIX ===> POSTFIX ###
 def infix_to_postfix(formula):

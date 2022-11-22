@@ -5,6 +5,8 @@
 using namespace std;
 vector<char> key;
 vector<string> prod;
+
+// S-Sab|b
 int main()
 {
     cout<<"Enter the production";

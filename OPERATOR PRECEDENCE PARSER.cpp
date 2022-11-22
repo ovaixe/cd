@@ -2,6 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 
+// a+b*c*d
+
 char *input;
 int i=0;
 char lasthandle[4],stack[50],handles[6][4]={"E+E","E*E","a","b","c","d"};

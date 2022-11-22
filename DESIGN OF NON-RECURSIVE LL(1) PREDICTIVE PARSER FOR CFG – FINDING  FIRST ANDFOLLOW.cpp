@@ -7,6 +7,13 @@
 int n, m = 0, p, i = 0, j = 0;
 char a[10][10], f[10];
 
+//ip :
+S-XYZ
+S-x
+X-y
+Y-yz
+
+
 void follow(char c);
 void first(char c);
 

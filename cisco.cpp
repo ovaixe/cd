@@ -1,3 +1,5 @@
-int main() {
+void addUser() {
 }
 
+int main() {
+}
